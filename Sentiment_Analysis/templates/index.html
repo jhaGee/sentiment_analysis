@@ -1,0 +1,166 @@
+{% extends "bootstrap/base.html" %}
+
+{% block content %}
+
+<style type="text/css">
+  body{
+font:15px/1.5 Arial, Helvetica,sans-serif;
+font-family: 'Lato', sans-serif;
+}
+  .spinner-1:before{
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    height: 60px;
+    width: 60px;
+    margin-top: -30px;
+    margin-left: -30px;
+    border-radius: 50%;
+    border:6px solid transparent;
+    border-top-color: blue;
+    animation: spinner 0.7s linear infinite;
+  }
+               .jumbotron text-center{
+                background-color:green;
+                 }
+  @keyframes spinner {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  li { background-color:#BDBDBD; }
+  li:nth-child(odd) { background-color:green; }
+  header{
+    background-image:linear-gradient(rgba(46, 42, 42, 0.514),rgba(46, 42, 42, 0.514)),url(/static/aibackground.jpg);
+    background-size: cover;
+    background-position: center;
+    height:100vh;
+  }
+  .topic{
+    position: absolute;
+    width: 1140px;
+    top:15%;
+    left: 70%;
+    transform: translate(-50%,-50%);
+  }
+  .topic-1{
+    position: absolute;
+    width: 1140px;
+    top:21%;
+    left: 74%;
+    transform: translate(-50%,-50%);
+  }
+  .entertext{
+    position: absolute;
+    width: 1140px;
+    top:45%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .card-text{
+    position: absolute;
+    width: 1140px;
+    top:66%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .tableresult{
+    position: absolute;
+    width: 1140px;
+    top:80%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  h1{
+    margin: 0;
+  }
+  </style>
+<header>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+    <div class="topic">
+      <h2><b>Aritifical Intelligence Application<b></h2>
+    </div>
+    <div class="topic-1">
+        <h3><b>Sentiment Analysis using NLP<b></h3>
+    </div>
+  <div class="entertext">
+	  <form method="POST" action="{{ url_for('analyse')}}" id="myForm">
+		<label ><strong>Enter Your Text Below<strong></label><br>
+    <textarea class="form-control" rows="5" cols="5" name="rawtext"></textarea><br>
+
+    <input type="submit" onclick="myAnalyser()" value="Submit" class="btn btn-primary ">
+    <input type="button" onclick="myFunction()" value="Clear" class="btn btn-outline-dark">
+
+    <a href="{{ url_for('index')}}" type="button" class="btn btn-danger" > Reset</a>
+    </form>
+  </div>
+<div class="main">
+    <div class="card-text"> 
+    	<h2>Your Text</h2>
+      <p style="color:#2600ff;font-family:sans-serif;">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+       <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap" rel="stylesheet">
+        {{ received_text }}</p>
+  </div>
+  <div class="tableresult">
+  <div class="card-footer text-muted">
+  <table class="table table-striped table-dark" >
+  <thead>
+    <tr>
+      <th style="color: #0c0b0c;",scope="col">Sentiment</th>
+      <th style="color: #0c0b0c;",scope="col">Polarity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Score:</th>
+      <td>{{analysis}}</td>
+    </tr>
+</tbody></table>
+</div>
+</div>
+</header>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+<!-- Scripts starts here -->
+{% block scripts %}
+
+{{ super() }}
+
+<script>
+function myFunction() {
+    document.getElementById("myForm").reset();
+}
+</script>
+<script>
+function myAnalyser() {
+    document.querySelector('.main div').style.display = 'none';
+	//Hide the main division
+	document.querySelector('.main').classList.add('spinner-1');
+	// Server request
+	setTimeout(() => {
+	document.querySelector('.main').classList.remove('spinner-1');
+	//Remove the animation
+	document.querySelector('.main div').style.display = 'block';
+	//Show the main division
+	},5000);//Number of seconds to last
+}
+</script>
+
+<!-- Prevent it from being overwritten -->
+
+{% endblock %}

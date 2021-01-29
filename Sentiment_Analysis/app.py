@@ -10,16 +10,20 @@ from keras.models import load_model
 from tensorflow.python.framework import ops
 from tensorflow.keras.models import Sequential
 
-app = Flask(__name__)
+app = Flask(__name__,static_url_path='/static')
 Bootstrap(app)
 @app.route('/')
 def index():
 	return render_template('index.html')
 
+@app.route('/index', methods=['GET', 'POST'])
+def image(): 
+    return render_template('index.html')
+
 def init():
     global model
     # load the pre-trained Keras model
-    model = load_model('sentiment_model.h5')
+    model = load_model('sentiment_analysis.h5')
 
 
 @app.route('/analyse',methods=['POST'])
@@ -28,6 +32,7 @@ def analyse():
         analysis=''
         rawtext = request.form['rawtext']
         d = imdb.get_word_index()
+        print(rawtext)
         words = rawtext.split()
         review = []
         for word in words:
@@ -38,8 +43,14 @@ def analyse():
         review = sequence.pad_sequences([review], truncating='pre', padding='pre', maxlen=80)
         prediction = model.predict(review)
         print(prediction)
-        if prediction > 0.5:
+        if prediction >=0.8:
+            analysis='VERY POSITIVE :-)'
+        elif prediction>=0.5 and prediction<0.8:
             analysis='POSITIVE :-)'
+        elif prediction>=0.35 and prediction<0.5:
+            analysis= 'SLIGHTLY POSITIVE'
+        elif prediction>=0.26 and prediction<0.35:
+            analysis= 'NEUTRAL'
         else:
             analysis='NEGATIVE :-('
 
